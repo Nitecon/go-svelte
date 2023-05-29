@@ -7,7 +7,7 @@ const config = {
             assets: 'static',  // destination for assets
             fallback: null,
         })
-    }
+    },
 };
 
 export default config;

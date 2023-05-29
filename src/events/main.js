@@ -80,73 +80,6 @@ export async function putData(url, data) {
     });
 }
 
-function createManifestEvents() {
-
-    const loadManifests = () => {
-        fetch(`/api/manifests`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to fetch user info during event pipeline');
-                }
-                return response.json();
-            })
-            .then(data => {
-                set(data.result);
-            })
-            .catch(error => {
-                set([]);
-            });
-    };
-
-    const { subscribe, set } = writable([], () => {
-        // Call loadManifests when the store is created if the store is empty
-        if (get(manifestEvents).length === 0) {
-            loadManifests();
-        }
-    });
-
-    return {
-        subscribe,
-        loadManifests,
-    };
-}
-
-export const manifestEvents = createManifestEvents();
-
-function createTemplateEvents() {
-
-    const loadTemplates = () => {
-        fetch(`/api/templates`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to fetch user info during event pipeline');
-                }
-                return response.json();
-            })
-            .then(data => {
-                set(data.result);
-            })
-            .catch(error => {
-                set([]);
-            });
-    };
-
-    const { subscribe, set } = writable([], () => {
-        // Call loadTemplates when the store is created if the store is empty
-        if (get(templateEvents).length === 0) {
-            loadTemplates();
-        }
-    });
-
-    return {
-        subscribe,
-        loadTemplates,
-    };
-}
-
-export const templateEvents = createTemplateEvents();
-
-
 function createUserEvents() {
     const {subscribe, set} = writable({isLoggedIn: false, userData : {}});
 
@@ -174,23 +107,6 @@ function createUserEvents() {
 }
 
 export const userEvents = createUserEvents();
-
-function createModalEvents() {
-    const {subscribe, set} = writable({isShown: false, title: "No Title", content: "No Content", type: "info"});
-
-    return {
-        subscribe,
-        setContent: (inTitle, inContent, inType) => set({
-            title: inTitle,
-            content: inContent,
-            isShown: true,
-            type: inType
-        }),
-        hide: () => set({title: "No Title", content: "No Content", isShown: false, type: ""}),
-    };
-}
-
-export const modalEvents = createModalEvents();
 
 // Create teh growl events items
 function createGrowlEvents() {
