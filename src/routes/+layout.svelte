@@ -1,4 +1,6 @@
 <script>
+    import "@fontsource/lato";
+    import "@fontsource/fira-sans";
     import Navi from '../components/Navigation.svelte';
     import CookieBanner from '../components/CookieBanner.svelte';
     import Growl from '../components/Growl.svelte';
@@ -16,10 +18,3 @@
         <slot />
     </div>
 </div>
-
-<style>
-    .app-container {
-        min-height: 50vh;
-    }
-
-</style>
