@@ -2,6 +2,7 @@ static/_app
 .svelte-kit
 .idea
 package-lock.json
+.DS_Store
 
 # Logs
 logs
