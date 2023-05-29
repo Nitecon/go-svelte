@@ -1,21 +1,15 @@
 <script>
-    //import Counter from './Counter.svelte';
-    //import welcome from '$lib/images/svelte-welcome.webp';
-    //import welcome_fallback from '$lib/images/svelte-welcome.png';
+import Header from "../components/Header.svelte";
 </script>
 
 <svelte:head>
     <title>Home</title>
-    <meta name="description" content="Svelte demo app" />
+    <meta name="description" content="Homepage and main content for the site." />
 </svelte:head>
 
 <section class="main-section">
     <main>
-        <h1 class="header-container">
-            <img src="/favicon.png" alt="Site Logo"/>Home
-        </h1>
-
-        <h2>Home</h2>
+        <Header title="Home" image="/favicon.png" type="h1"></Header>
         <p>
             Welcome to our website! We are thrilled to have you here, where you can explore a myriad of services, products,
             and information that we have curated just for you. Our commitment is to deliver exceptional value and quality
