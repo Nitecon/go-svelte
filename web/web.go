@@ -5,8 +5,7 @@ import (
 )
 
 func HandleRoutes(r *gin.Engine) *gin.Engine {
-
-	r.Static("static", "/")
+	r.Static("/", "static/")
 	/*r.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", nil)
 	})*/
