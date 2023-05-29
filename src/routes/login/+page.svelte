@@ -1,12 +1,11 @@
 <svelte:head>
-    <title>About</title>
+    <title>Login</title>
     <meta name="description" content="About this app" />
 </svelte:head>
 
 <div class="text-column">
-    <h1>About this app</h1>
+    <h1>Login</h1>
 
-    <p>
-        This is about the app.
-    </p>
+    <p>This is the login page</p>
+
 </div>
