@@ -24,6 +24,7 @@
   "dependencies": {
     "@fontsource/fira-sans": "^5.0.1",
     "@fontsource/lato": "^5.0.1",
-    "purecss": "^3.0.0"
+    "purecss": "^3.0.0",
+    "svelte-use-form": "^2.6.2"
   }
 }

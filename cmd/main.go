@@ -51,8 +51,12 @@ func main() {
 			Dur("latency", latency).
 			Msg(msg)
 	})
+	staticDir := "static"
+	if os.Getenv("STATIC_DIR") != "" {
+		staticDir = os.Getenv("STATIC_DIR")
+	}
 
-	web.HandleRoutes(router)
+	web.HandleRoutes(router, staticDir)
 	port := os.Getenv("PORT")
 	listenPort := ":8888"
 	if port != "" {
