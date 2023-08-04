@@ -17,6 +17,7 @@ var (
 // AppConfig is the General Configuration for the application.
 type AppConfig struct {
 	SessionHash          string
+	CloudProvider        string
 	GoogleProjectID      string
 	GoogleAppCredentials string
 	SessionKey           string
@@ -48,9 +49,16 @@ func Get() *AppConfig {
 // InitConfig uses a mutex to quickly store all the initial configurations that is used within the application that provides faster access.
 func InitConfig() {
 	c := &AppConfig{}
-
+	c.GoogleProjectID = strings.TrimSuffix(c.getEnvKey("GOOGLE_PROJECT_ID"), "\n")
+	c.GoogleAppCredentials = strings.TrimSuffix(c.getEnvKey("GOOGLE_APPLICATION_CREDENTIALS"), "\n")
 	c.SessionKey = c.getEnvKey("SESSION_KEY")
 	c.SecureCookie = securecookie.New([]byte(c.SessionHash), []byte(c.SessionKey))
+	c.CloudProvider = c.getEnvKey("CLOUD_PROVIDER")
+	c.OAuth.RedirectURI = c.getEnvKey("OAUTH_REDIRECT_URI")
+	c.OAuth.ClientID = c.getEnvKey("OAUTH_CLIENT_ID")
+	if c.CloudProvider == "" {
+		c.CloudProvider = "gcp"
+	}
 	debugVal := strings.ToLower(c.getEnvKey("DEBUG"))
 
 	if debugVal == "true" || debugVal == "enabled" {
@@ -64,24 +72,32 @@ func InitConfig() {
 }
 
 func InitSecrets() {
-	/*c := Get()
-	sgKey, err := GetGoogleSecret("sendgrid")
-	if err != nil {
-		log.Error().Err(err).Msg("failed to get sendgrid secret")
+	c := Get()
+	if c.CloudProvider == "gcp" {
+		oSec, err := GetGoogleSecret("OAUTH_CLIENT_SECRET")
+		if err != nil {
+			log.Error().Err(err).Msg("failed to get OAUTH secret")
+		}
+		c.OAuth.ClientSecret = oSec
+	} else if c.CloudProvider == "aws" {
+		s, err := NewSecretManager()
+		if err != nil {
+			log.Error().Err(err).Msg("failed to create secret manager client")
+			return
+		}
+		/* it's session based, so we can retrieve all the following keys with a single aws session */
+		oSec, err := s.GetAWSSecret("OAUTH_CLIENT_SECRET")
+		if err != nil {
+			log.Error().Err(err).Msg("failed to get OAUTH secret")
+			return
+		}
+		c.OAuth.ClientSecret = oSec
+	} else {
+		log.Error().Msg("No known cloud provider is set, retrieving from environment variables")
+		c.OAuth.ClientSecret = c.getEnvKey("OAUTH_CLIENT_SECRET")
 	}
-	tsKey, err := GetGoogleSecret("typesense")
-	if err != nil {
-		log.Error().Err(err).Msg("failed to get typesense secret")
-	}
-	gmailPass, err := GetGoogleSecret("gmail")
-	if err != nil {
-		log.Error().Err(err).Msg("failed to get gmail secret")
-	}
-	c.SendGrid = sgKey
-	c.TypeSenseKey = tsKey
-	c.GmailPassword = gmailPass
 
 	configLock.Lock()
 	defer configLock.Unlock()
-	config = c*/
+	config = c
 }

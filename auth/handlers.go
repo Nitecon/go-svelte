@@ -6,7 +6,7 @@ import (
 )
 
 func AuthRoutes(r *gin.RouterGroup) {
-	r.GET("/login/google", func(c *gin.Context) {
+	r.GET("/auth/login/google", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "Login route",
 		})

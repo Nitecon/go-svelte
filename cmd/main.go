@@ -1,14 +1,15 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"go-svelte/cache"
 	"go-svelte/config"
 	"go-svelte/web"
 	"os"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 )
 
 var (
@@ -37,19 +38,15 @@ func main() {
 	router := gin.New()
 	router.Use(func(c *gin.Context) {
 		start := time.Now()
-		path := c.Request.URL.Path
-
 		c.Next()
-
 		end := time.Now()
 		latency := end.Sub(start)
-
-		msg := "Request"
 		log.Info().
-			Str("path", path).
+			Str("path", c.Request.URL.Path).
+			Str("action", c.Request.Method).
 			Int("status", c.Writer.Status()).
 			Dur("latency", latency).
-			Msg(msg)
+			Msg("Request")
 	})
 	staticDir := "static"
 	if os.Getenv("STATIC_DIR") != "" {
@@ -57,12 +54,11 @@ func main() {
 	}
 
 	web.HandleRoutes(router, staticDir)
-	port := os.Getenv("PORT")
+	port := os.Getenv("LISTEN_PORT")
 	listenPort := ":8888"
 	if port != "" {
 		listenPort = ":" + port
 	}
 	log.Info().Msgf("Listening on %s", listenPort)
 	log.Fatal().Err(router.Run(listenPort))
-
 }

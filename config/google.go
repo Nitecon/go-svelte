@@ -5,6 +5,7 @@ import (
 	"cloud.google.com/go/secretmanager/apiv1/secretmanagerpb"
 	"context"
 	"fmt"
+	"github.com/rs/zerolog/log"
 	"google.golang.org/api/option"
 )
 
@@ -13,6 +14,7 @@ func GetGoogleSecret(keyName string) (string, error) {
 
 	// Replace <PROJECT_ID> with your project ID.
 	projectID := Get().GoogleProjectID
+	log.Info().Msgf("Getting secret %s from project %s", keyName, projectID)
 
 	// Create the Secret Manager client.
 	client, err := secretmanager.NewClient(ctx, option.WithCredentialsFile(Get().GoogleAppCredentials))

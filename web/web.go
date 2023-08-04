@@ -19,7 +19,7 @@ func GetStaticFiles(staticDir string) (map[string]string, error) {
 		if !info.IsDir() {
 			relativePath := filepath.ToSlash(strings.TrimPrefix(path, staticDir))
 			url := "/" + strings.TrimPrefix(relativePath, "/")
-			log.Info().Msgf("Found static file: %s, setting url: %s", path, url)
+			log.Debug().Msgf("Found static file: %s, setting url: %s", path, url)
 			staticFiles[url] = path
 			if strings.HasSuffix(url, ".html") {
 				staticFiles[strings.TrimSuffix(url, ".html")] = path
@@ -36,12 +36,15 @@ func GetStaticFiles(staticDir string) (map[string]string, error) {
 }
 
 func HandleRoutes(r *gin.Engine, staticDir string) *gin.Engine {
+	r.StaticFile("/", fmt.Sprintf("%s/index.html", staticDir))
 
 	// Add the auth routes
-	authRoutes := r.Group("/api/auth")
+	authRoutes := r.Group("/api")
 	auth.AuthRoutes(authRoutes)
 
-	r.StaticFile("/", fmt.Sprintf("%s/index.html", staticDir))
+	authRedirects := r.Group("/goto/")
+	AuthRedirects(authRedirects)
+
 	/* Now we handle all the static files on the filesystem */
 	staticFiles, err := GetStaticFiles(staticDir)
 	if err != nil {

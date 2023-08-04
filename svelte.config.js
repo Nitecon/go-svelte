@@ -5,7 +5,7 @@ const config = {
         prerender: {
             handleHttpError: ({ path, referrer, message }) => {
                 // ignore api servers
-                if (path.startsWith('/api')) {
+                if (path.startsWith('/api') || path.startsWith('/goto')) {
                     return;
                 }
 

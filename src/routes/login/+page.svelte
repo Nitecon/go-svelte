@@ -36,7 +36,7 @@ onMount(() => {
 });
 
 
-export let google_login = "/api/auth/login/google"
+export let google_login = "/goto/auth/login/google"
 //export let github_login = "/api/auth/login/github"
 //export let twitter_login = "/api/auth/login/twitter"
 
