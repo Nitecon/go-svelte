@@ -1,6 +1,5 @@
 package config
 
-/*
 import (
 	secretmanager "cloud.google.com/go/secretmanager/apiv1"
 	"cloud.google.com/go/secretmanager/apiv1/secretmanagerpb"
@@ -35,4 +34,3 @@ func GetGoogleSecret(keyName string) (string, error) {
 	// Convert the secret value to a string and return it.
 	return string(resp.Payload.Data), nil
 }
-*/
